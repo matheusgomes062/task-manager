@@ -1,26 +1,49 @@
+const Task = require('../models/Task')
+
 const getAllTasks = (req, res) => {
-    res.send('All items')
+    const tasks = Task.find({})
+    res.status(200).json({ tasks })
 }
 
 const createTask = (req, res) => {
+    const tasks = Task.create(req.body)
     res.send('Create item')
-    res.status(201).json(req.body)
+    res.status(201).json({ task })
 }
 
 const getTask = (req, res) => {
-    res.json({ id: req.params.id })
+    const { id: taskID } = req.params
+    const task = Task.findOne({ _id: taskID })
+
+    if (!task) {
+        return next(Error(`No task with id : ${taskID}`, 404))
+    }
+
+    res.status(200).json({ task })
 }
 
 const updateTask = (req, res) => {
-    res.send('Update item')
+    const { id: taskID } = req.params
+  
+    const task = Task.findOneAndUpdate({ _id: taskID }, req.body, {
+      new: true,
+      runValidators: true,
+    })
+  
+    if (!task) {
+      return next(Error(`No task with id : ${taskID}`, 404))
+    }
+  
+    res.status(200).json({ task })
 }
 
 const deleteTask = (req, res) => {
-    res.send('Delete item')
-}
-
-const deleteAllTasks = (req, res) => {
-    res.send('Delete all items')
+    const { id: taskID } = req.params
+    const task = Task.findOneAndDelete({ _id: taskID })
+    if (!task) {
+      return next(Error(`No task with id : ${taskID}`, 404))
+    }
+    res.status(200).json({ task })
 }
 
 
@@ -29,6 +52,5 @@ module.exports = {
     createTask,
     getTask,
     updateTask,
-    deleteTask,
-    deleteAllTasks
+    deleteTask
 }
