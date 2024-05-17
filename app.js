@@ -1,8 +1,9 @@
-require('./db/connect');
 const express = require('express');
 const app = express();
-const tasks = require('./routes/tasks');
+const connectDB = require('./db/connect');
 require('dotenv').config();
+
+const tasks = require('./routes/tasks');
 
 const port = process.env.PORT || 5000;
 
