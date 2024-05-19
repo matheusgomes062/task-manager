@@ -1,5 +1,6 @@
 const Task = require('../models/Task')
 const { createCustomError } = require('../errors/custom-error')
+const asyncWrapper = require('../middleware/async')
 
 const getAllTasks = asyncWrapper(async (req, res) => {
   const tasks = await Task.find({})
